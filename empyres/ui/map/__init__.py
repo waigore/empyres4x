@@ -1,0 +1,1 @@
+from .mapwidget import GameMapWidget
