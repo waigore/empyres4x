@@ -24,8 +24,13 @@ from PyQt5.QtCore import (
     pyqtSignal
 )
 from empyres.core.map import CPoint
+from empyres.core.player import PlayerColors
 
 logger = logging.getLogger(__name__)
+
+HexBorderColors = {
+    PlayerColors.Yellow: Qt.yellow
+}
 
 class HexGraphicsItem(QGraphicsPolygonItem):
     Adjust = 0.5
@@ -40,7 +45,7 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         self.setPolygon(self.pointyHexagon())
 
     def initParams(self):
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        #self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
 
     def pointyHexCorner(self, i, center):
@@ -52,18 +57,33 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         return CPoint(center.x + size * math.cos(angleRad), center.y + size * math.sin(angleRad))
 
     def pointyHexagon(self, center = None):
+        return QPolygonF(self.pointyHexagonPoints(center))
+
+    def pointyHexagonPoints(self, center = None, includeInitial = False):
         pts = [self.pointyHexCorner(i, center) for i in range(6)]
-        qpts = [QPoint(p.x, p.y) for p in pts]
-        return QPolygonF(qpts)
+        if includeInitial:
+            pts.append(self.pointyHexCorner(0, center))
+        return [QPoint(p.x, p.y) for p in pts]
+
+    def getHexBorderColor(self, homeRegionName):
+        return HexBorderColors[homeRegionName]
 
     def drawPointyHexagon(self, painter):
-        painter.setPen(QPen(
-                QColor('#5A5A5A'),
-                2 if self.isSelected() else 1,
-                Qt.SolidLine))
+        homeRegionName, borders = self.hex.homeRegionBorders()
+        normalPen = QPen(QColor('#5A5A5A'))
+        borderPen = QPen(
+            self.getHexBorderColor(homeRegionName) if homeRegionName else QColor('#5A5A5A'),
+            2)
+
+        painter.setPen(normalPen)
         painter.setBrush(QBrush(Qt.black))
-        hexagonPoints = self.pointyHexagon()
-        painter.drawPolygon(self.pointyHexagon())
+        hexagonPoints = self.pointyHexagonPoints(includeInitial = True)
+        for i in range(len(hexagonPoints)-1):
+            pen = borderPen if i in borders else normalPen
+            pt1 = hexagonPoints[i]
+            pt2 = hexagonPoints[i+1]
+            painter.setPen(pen)
+            painter.drawLine(pt1, pt2)
 
     def paint(self, painter, option, widget):
         self.drawPointyHexagon(painter)
