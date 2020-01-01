@@ -29,7 +29,10 @@ from empyres.core.player import PlayerColors
 logger = logging.getLogger(__name__)
 
 HexBorderColors = {
-    PlayerColors.Yellow: Qt.yellow
+    PlayerColors.Yellow: Qt.yellow,
+    PlayerColors.Green: Qt.green,
+    PlayerColors.Red: Qt.red,
+    PlayerColors.Blue: Qt.cyan,
 }
 
 class HexGraphicsItem(QGraphicsPolygonItem):

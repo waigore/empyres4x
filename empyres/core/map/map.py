@@ -3,6 +3,9 @@ import math
 from .func import *
 from .region import (
     HomeRegionYellow,
+    HomeRegionGreen,
+    HomeRegionRed,
+    HomeRegionBlue,
 )
 from empyres.core.player import PlayerColors
 
@@ -28,7 +31,7 @@ class GameMap(object):
     HexRegionsHome = 'HexRegionsHome'
     def __init__(self, **kwargs):
         self.numCols = kwargs.setdefault('numCols', 13)
-        self.numRows = kwargs.setdefault('numCols', 12)
+        self.numRows = kwargs.setdefault('numRows', 12)
         self.isStaggered = kwargs.setdefault('isStaggered', True)
 
         self.mapRegions = {}
@@ -59,7 +62,10 @@ class GameMap(object):
 
     def initHomeRegions(self):
         self.mapRegions[GameMap.HexRegionsHome] = {
-            PlayerColors.Yellow: HomeRegionYellow
+            PlayerColors.Yellow: HomeRegionYellow,
+            PlayerColors.Green: HomeRegionGreen,
+            PlayerColors.Red: HomeRegionRed,
+            PlayerColors.Blue: HomeRegionBlue,
         }
 
     def getAllHomeRegions(self):
