@@ -51,21 +51,22 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         #self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
 
-    def pointyHexCorner(self, i, center):
-        size = self.size
+    def pointyHexCorner(self, i, center, size):
+        if not size:
+            size = self.size
         if not center:
             center = self.center
         angleDeg = 60 * (i%6) - 30
         angleRad = math.pi / 180 * angleDeg
         return CPoint(center.x + size * math.cos(angleRad), center.y + size * math.sin(angleRad))
 
-    def pointyHexagon(self, center = None):
-        return QPolygonF(self.pointyHexagonPoints(center))
+    def pointyHexagon(self, center = None, size = None):
+        return QPolygonF(self.pointyHexagonPoints(center, size))
 
-    def pointyHexagonPoints(self, center = None, includeInitial = False):
-        pts = [self.pointyHexCorner(i, center) for i in range(6)]
+    def pointyHexagonPoints(self, center = None, size = None, includeInitial = False):
+        pts = [self.pointyHexCorner(i, center, size) for i in range(6)]
         if includeInitial:
-            pts.append(self.pointyHexCorner(0, center))
+            pts.append(self.pointyHexCorner(0, center, size))
         return [QPoint(p.x, p.y) for p in pts]
 
     def getHexBorderColor(self, homeRegionName):
@@ -81,6 +82,12 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         painter.setPen(normalPen)
         painter.setBrush(QBrush(Qt.black))
         hexagonPoints = self.pointyHexagonPoints(includeInitial = True)
+
+        #hexagon itself (slightly smaller so no overlap with borders)
+        hexagon = self.pointyHexagon(size = self.size - 2)
+        painter.drawPolygon(hexagon)
+
+        #hexagon border (with appropriate border colors for home region hexes)
         for i in range(len(hexagonPoints)-1):
             pen = borderPen if i in borders else normalPen
             pt1 = hexagonPoints[i]
