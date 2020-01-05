@@ -6,6 +6,8 @@ from .region import (
     HomeRegionGreen,
     HomeRegionRed,
     HomeRegionBlue,
+    TheDeepSpace,
+    MapRegionTypes,
 )
 from empyres.core.player import PlayerColors
 
@@ -13,6 +15,7 @@ class Hex(object):
     def __init__(self, map, aPoint, **kwargs):
         self.map = map
         self.aPoint = aPoint
+        self.systemMarker = kwargs.setdefault('systemMarker', None)
 
     def containingHomeRegion(self):
         homeRegions = self.map.getAllHomeRegions()
@@ -29,6 +32,7 @@ class Hex(object):
 
 class GameMap(object):
     HexRegionsHome = 'HexRegionsHome'
+    HexRegionsDeepSpace = 'HexRegionsDeepSpace'
     def __init__(self, **kwargs):
         self.numCols = kwargs.setdefault('numCols', 13)
         self.numRows = kwargs.setdefault('numRows', 12)
@@ -38,6 +42,7 @@ class GameMap(object):
 
         self.initHexes()
         self.initHomeRegions()
+        self.initDeepSpace()
 
     def initHexes(self):
         self.hexes = []
@@ -68,8 +73,26 @@ class GameMap(object):
             PlayerColors.Blue: HomeRegionBlue,
         }
 
+    def initDeepSpace(self):
+        self.mapRegions[GameMap.HexRegionsDeepSpace] = {
+            MapRegionTypes.DeepSpace: TheDeepSpace
+        }
+
     def getAllHomeRegions(self):
         return self.mapRegions[GameMap.HexRegionsHome].values()
+
+    def getHomeRegion(self, color):
+        return self.mapRegions[GameMap.HexRegionsHome][color]
+
+    def getDeepSpace(self):
+        return self.mapRegions[GameMap.HexRegionsDeepSpace][MapRegionTypes.DeepSpace]
+
+    def getDeepSpaceHexes(self):
+        deepSpaceRegion = self.mapRegions[GameMap.HexRegionsDeepSpace][MapRegionTypes.DeepSpace]
+        hexList = []
+        for aPoint in deepSpaceRegion.aPoints:
+            hexList.append(self.getHexAt(aPoint))
+        return hexList
 
     def getHomeRegionHexes(self, playerColor):
         homeRegion = self.mapRegions[GameMap.HexRegionsHome][playerColor]

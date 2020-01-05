@@ -3,8 +3,9 @@ import functools
 from .func import APoint, AxialDirections, hexNeighbor
 from empyres.core.player import PlayerColors
 
-class MapRegionType(enum.Enum):
+class MapRegionTypes(enum.Enum):
     HomeRegion = 'HomeRegion'
+    DeepSpace  = 'DeepSpace'
 
 class MapRegion(object):
     def __init__(self, name, regionType, aPoints):
@@ -41,9 +42,17 @@ class MapRegion(object):
                 borders.append(i)
         return borders
 
+    @property
+    def hexCount(self):
+        return len(self.aPoints)
+
 class HomeRegion(MapRegion):
     def __init__(self, name, aPoints):
-        super(HomeRegion, self).__init__(name, MapRegionType.HomeRegion, aPoints)
+        super(HomeRegion, self).__init__(name, MapRegionTypes.HomeRegion, aPoints)
+
+class DeepSpaceRegion(MapRegion):
+    def __init__(self, aPoints):
+        super(DeepSpaceRegion, self).__init__('DeepSpace', MapRegionTypes.DeepSpace, aPoints)
 
 p = APoint
 
@@ -77,4 +86,19 @@ HomeRegionBlue = HomeRegion(PlayerColors.Blue, [
     p(3, 9), p(4, 9), p(5, 9), p(6, 9), p(7, 9),
     p(3, 10), p(4, 10), p(5, 10), p(6, 10), p(7, 10),
     p(2, 11), p(3, 11), p(4, 11), p(5, 11), p(6, 11),
+])
+
+TheDeepSpace = DeepSpaceRegion([
+    p(5, 0), p(6, 0),
+    p(5, 1), p(6, 1),
+    p(5, 2), p(6, 2),
+    p(4, 3), p(5, 3),
+    p(3, 4), p(4, 4), p(5, 4),
+    p(-2, 5), p(-1, 5), p(0, 5), p(1, 5), p(2, 5), p(3, 5), p(4, 5), p(5, 5), p(6, 5), p(7, 5), p(8, 5), p(9, 5),
+    p(-3, 6), p(-2, 6), p(-1, 6),p(0, 6), p(1, 6), p(2, 6), p(3, 6), p(4, 6), p(5, 6), p(6, 6), p(7, 6), p(8, 6), p(9, 6),
+    p(2, 7), p(3, 7),
+    p(1, 8), p(2, 8),
+    p(1, 9), p(2, 9),
+    p(1, 10),p(2, 10),
+    p(0, 11),p(1, 11),
 ])
