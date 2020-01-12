@@ -6,7 +6,10 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget
 )
-from empyres.core.map import GameMap
+from empyres.core.map import (
+    SystemMarkerGen,
+    GameMap
+)
 from empyres.ui.map import GameMapWidget
 
 class MainWindow(QMainWindow):
@@ -18,6 +21,9 @@ class MainWindow(QMainWindow):
         layout = QHBoxLayout()
 
         gameMap = GameMap()
+        systemMarkerGen = SystemMarkerGen(gameMap, seed=30)
+        systemMarkerGen.populateMap()
+
         gameMapWidget = GameMapWidget(gameMap)
         layout.addWidget(gameMapWidget)
 

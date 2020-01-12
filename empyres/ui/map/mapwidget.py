@@ -23,8 +23,12 @@ from PyQt5.QtCore import (
     QPointF,
     pyqtSignal
 )
-from empyres.core.map import CPoint
+from empyres.core.map import (
+    SystemMarkerTypes,
+    CPoint
+)
 from empyres.core.player import PlayerColors
+from empyres.ui.icon import *
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +37,10 @@ HexBorderColors = {
     PlayerColors.Green: Qt.green,
     PlayerColors.Red: Qt.red,
     PlayerColors.Blue: Qt.cyan,
+}
+
+SystemMarkerIcons = {
+    SystemMarkerTypes.Planet: TTBarrenPlanet
 }
 
 class HexGraphicsItem(QGraphicsPolygonItem):
@@ -95,8 +103,16 @@ class HexGraphicsItem(QGraphicsPolygonItem):
             painter.setPen(pen)
             painter.drawLine(pt1, pt2)
 
+    def drawSystemMarker(self, painter):
+        center = self.center
+        target = QRect(center.x-15, center.y-15, 30, 30)
+        painter.drawImage(target, TTUnrevealed, TTUnrevealed.rect())
+        #qpainter.drawImage()
+
     def paint(self, painter, option, widget):
         self.drawPointyHexagon(painter)
+        if self.hex.systemMarker:
+            self.drawSystemMarker(painter)
 
     @property
     def size(self):

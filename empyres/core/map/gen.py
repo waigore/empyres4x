@@ -1,4 +1,5 @@
 import enum
+import logging
 import random
 from .marker import *
 from .region import (
@@ -10,6 +11,8 @@ from .region import (
     MapRegionTypes
 )
 from empyres.core.player import PlayerColors
+
+logger = logging.getLogger(__name__)
 
 class SystemMarkerDistributions(enum.Enum):
     Sparse = 'Sparse'
@@ -111,9 +114,10 @@ class SystemMarkerGenProfile(object):
 StandardProfile = SystemMarkerGenProfile('Normal')
 
 class SystemMarkerGen(object):
-    def __init__(self, map, genProfile = None):
+    def __init__(self, map, genProfile = None, **kwargs):
         self.map = map
         self.genProfile = StandardProfile if genProfile is None else genProfile
+        self.seed = kwargs.setdefault('seed', None)
 
     def populateMarkerBucket(self, bucket, marker, num):
         bucket.extend([marker] * num)
@@ -133,6 +137,9 @@ class SystemMarkerGen(object):
             hex.systemMarker = SystemMarkerCreatorsByType[marker]()
 
     def populateMap(self):
+        if self.seed:
+            logger.info('Generator seed: {}'.format(self.seed))
+            random.seed(self.seed)
         markerBuckets = {
             PlayerColors.Yellow: [],
             PlayerColors.Green: [],
@@ -140,12 +147,13 @@ class SystemMarkerGen(object):
             PlayerColors.Blue: []
         }
         deepSpaceBucket = []
-        allBuckets = list(markerBuckets.values()) + [deepSpaceBucket]
+        sortedMarkerBuckets = [markerBuckets[key] for key in PlayerColors.ordered()]
+        allBuckets = sortedMarkerBuckets + [deepSpaceBucket]
         for markerType in SystemMarkerTypes:
             possibleRegion = PossibleRegions[markerType]
             number = self.genProfile.getMarkerCount(markerType)
             if possibleRegion == SystemMarkerGenRegions.HomeRegionOnly:
-                for markerBucket in markerBuckets.values():
+                for markerBucket in sortedMarkerBuckets:
                     self.populateMarkerBucket(markerBucket, markerType, number)
             elif possibleRegion == SystemMarkerGenRegions.DeepSpaceOnly:
                 self.populateMarkerBucket(deepSpaceBucket, markerType, number)
