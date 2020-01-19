@@ -9,13 +9,14 @@ from .region import (
     TheDeepSpace,
     MapRegionTypes,
 )
+from .marker import EmptySpaceMarker
 from empyres.core.player import PlayerColors
 
 class Hex(object):
     def __init__(self, map, aPoint, **kwargs):
         self.map = map
         self.aPoint = aPoint
-        self.systemMarker = kwargs.setdefault('systemMarker', None)
+        self.systemMarker = kwargs.setdefault('systemMarker', EmptySpaceMarker())
 
     def containingHomeRegion(self):
         homeRegions = self.map.getAllHomeRegions()

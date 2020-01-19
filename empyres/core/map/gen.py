@@ -149,9 +149,14 @@ class SystemMarkerGen(object):
         deepSpaceBucket = []
         sortedMarkerBuckets = [markerBuckets[key] for key in PlayerColors.ordered()]
         allBuckets = sortedMarkerBuckets + [deepSpaceBucket]
+
         for markerType in SystemMarkerTypes:
-            possibleRegion = PossibleRegions[markerType]
+            possibleRegion = PossibleRegions[markerType] if markerType in PossibleRegions else None
+            if possibleRegion is None:
+                continue
+
             number = self.genProfile.getMarkerCount(markerType)
+
             if possibleRegion == SystemMarkerGenRegions.HomeRegionOnly:
                 for markerBucket in sortedMarkerBuckets:
                     self.populateMarkerBucket(markerBucket, markerType, number)

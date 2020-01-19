@@ -11,6 +11,7 @@ class SystemMarkerTypes(enum.Enum):
     LostInSpace = 'LostInSpace'
     Minerals = 'Minerals'
     SpaceWreck = 'SpaceWreck'
+    EmptySpace = 'EmptySpace'
 
 class PlanetTypes(enum.Enum):
     Barren = 'Barren'
@@ -69,6 +70,12 @@ class SystemMarker(object):
     def enterEffect(self, game, player, unit):
         pass
 
+class EmptySpaceMarker(SystemMarker):
+    def __init__(self):
+        super(EmptySpaceMarker, self).__init__(
+            SystemMarkerTypes.EmptySpace
+        )
+
 class PlanetMarker(SystemMarker):
     def __init__(self, planetType):
         super(PlanetMarker, self).__init__(
@@ -114,7 +121,8 @@ class DangerMarker(SystemMarker):
 class SupernovaMarker(SystemMarker):
     def __init__(self):
         super(SupernovaMarker, self).__init__(
-            SystemMarkerTypes.Danger,
+            SystemMarkerTypes.Supernova,
+            canEnter = False
         )
 
 class LostInSpaceMarker(SystemMarker):
