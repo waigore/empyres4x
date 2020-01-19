@@ -23,6 +23,7 @@ from PyQt5.QtCore import (
 )
 from empyres.core.map import (
     SystemMarkerTypes,
+    PlanetTypes,
     CPoint
 )
 from empyres.ui.icon import *
@@ -90,9 +91,39 @@ class HexGraphicsItem(QGraphicsPolygonItem):
 
     def drawSystemMarker(self, painter):
         center = self.center
-        target = QRect(center.x-15, center.y-15, 30, 30)
-        painter.drawImage(target, TTUnrevealed, TTUnrevealed.rect())
-        #qpainter.drawImage()
+        hex = self.hex
+        systemMarker = hex.systemMarker
+
+        target = QRect(center.x-20, center.y-20, 40, 40)
+        if not systemMarker.isRevealed:
+            self.drawSystemMarkerImage(painter, target, TTUnrevealed)
+        elif systemMarker.type == SystemMarkerTypes.EmptySpace:
+            pass
+        elif systemMarker.type == SystemMarkerTypes.Planet and \
+                systemMarker.planetType == PlanetTypes.Fertile:
+            self.drawSystemMarkerImage(painter, target, TTFertilePlanet)
+        elif systemMarker.type == SystemMarkerTypes.Planet and \
+                systemMarker.planetType == PlanetTypes.Barren:
+            self.drawSystemMarkerImage(painter, target, TTBarrenPlanet)
+        elif systemMarker.type == SystemMarkerTypes.Nebulae:
+            self.drawSystemMarkerImage(painter, target, TTNebula)
+        elif systemMarker.type == SystemMarkerTypes.Asteroids:
+            self.drawSystemMarkerImage(painter, target, TTAsteroids)
+        elif systemMarker.type == SystemMarkerTypes.BlackHole:
+            self.drawSystemMarkerImage(painter, target, TTBlackHole)
+        elif systemMarker.type == SystemMarkerTypes.Danger:
+            self.drawSystemMarkerImage(painter, target, TTDanger)
+        elif systemMarker.type == SystemMarkerTypes.Supernova:
+            self.drawSystemMarkerImage(painter, target, TTSupernova)
+        elif systemMarker.type == SystemMarkerTypes.LostInSpace:
+            self.drawSystemMarkerImage(painter, target, TTLostInSpace)
+        elif systemMarker.type == SystemMarkerTypes.Minerals:
+            self.drawSystemMarkerImage(painter, target, TTMinerals)
+        elif systemMarker.type == SystemMarkerTypes.SpaceWreck:
+            self.drawSystemMarkerImage(painter, target, TTSpaceWreck)
+
+    def drawSystemMarkerImage(self, painter, target, img):
+        painter.drawImage(target, img, img.rect())
 
     def paint(self, painter, option, widget):
         self.drawPointyHexagon(painter)

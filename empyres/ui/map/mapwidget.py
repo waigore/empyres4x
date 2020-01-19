@@ -74,6 +74,22 @@ class GameMapWidget(QGraphicsView):
                 hexItem = HexGraphicsItem(self, hex, center)
                 self.scene.addItem(hexItem)
 
+    def revealAllHexes(self):
+        for i in range(self.numRows):
+            for j in range(self.numCols):
+                hex = self.hexes[i][j]
+                if hex:
+                    hex.systemMarker.isRevealed = True
+        self.scene.update() #forces immediate redraw of the scene
+
+    def hideAllHexes(self):
+        for i in range(self.numRows):
+            for j in range(self.numCols):
+                hex = self.hexes[i][j]
+                if hex:
+                    hex.systemMarker.isRevealed = False
+        self.scene.update()
+
     @property
     def hexes(self):
         return self.gameMap.hexes

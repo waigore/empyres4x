@@ -4,8 +4,11 @@ from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
     QMainWindow,
+    QShortcut,
     QWidget
 )
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import QKeySequence
 from empyres.core.map import (
     SystemMarkerGen,
     GameMap
@@ -20,18 +23,31 @@ class MainWindow(QMainWindow):
 
         layout = QHBoxLayout()
 
-        gameMap = GameMap()
-        systemMarkerGen = SystemMarkerGen(gameMap, seed=30)
+        self.gameMap = GameMap()
+        systemMarkerGen = SystemMarkerGen(self.gameMap, seed=30)
         systemMarkerGen.populateMap()
 
-        gameMapWidget = GameMapWidget(gameMap)
-        layout.addWidget(gameMapWidget)
+        self.gameMapWidget = GameMapWidget(self.gameMap)
+        layout.addWidget(self.gameMapWidget)
+
+        self.revealShortcut = QShortcut(QKeySequence("R"), self)
+        self.revealShortcut.activated.connect(self.reveal)
+        self.hideShortcut = QShortcut(QKeySequence("U"), self)
+        self.hideShortcut.activated.connect(self.hide)
 
         w = QWidget()
         w.setLayout(layout)
         self.setCentralWidget(w)
 
         self.show()
+
+    @pyqtSlot()
+    def reveal(self):
+        self.gameMapWidget.revealAllHexes()
+
+    @pyqtSlot()
+    def hide(self):
+        self.gameMapWidget.hideAllHexes()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
