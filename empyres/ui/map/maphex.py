@@ -23,6 +23,7 @@ from PyQt5.QtCore import (
 )
 from empyres.core.map import (
     SystemMarkerTypes,
+    MineralAmounts,
     PlanetTypes,
     CPoint
 )
@@ -94,36 +95,63 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         hex = self.hex
         systemMarker = hex.systemMarker
 
-        target = QRect(center.x-20, center.y-20, 40, 40)
         if not systemMarker.isRevealed:
-            self.drawSystemMarkerImage(painter, target, TTUnrevealed)
+            self.drawSystemMarkerIcon(painter, TTUnrevealed)
         elif systemMarker.type == SystemMarkerTypes.EmptySpace:
             pass
         elif systemMarker.type == SystemMarkerTypes.Planet and \
                 systemMarker.planetType == PlanetTypes.Fertile:
-            self.drawSystemMarkerImage(painter, target, TTFertilePlanet)
+            self.drawSystemMarkerIcon(painter, TTFertilePlanet)
         elif systemMarker.type == SystemMarkerTypes.Planet and \
                 systemMarker.planetType == PlanetTypes.Barren:
-            self.drawSystemMarkerImage(painter, target, TTBarrenPlanet)
+            self.drawSystemMarkerIcon(painter, TTBarrenPlanet)
         elif systemMarker.type == SystemMarkerTypes.Nebulae:
-            self.drawSystemMarkerImage(painter, target, TTNebula)
+            self.drawSystemMarkerIcon(painter, TTNebula)
         elif systemMarker.type == SystemMarkerTypes.Asteroids:
-            self.drawSystemMarkerImage(painter, target, TTAsteroids)
+            self.drawSystemMarkerIcon(painter, TTAsteroids)
         elif systemMarker.type == SystemMarkerTypes.BlackHole:
-            self.drawSystemMarkerImage(painter, target, TTBlackHole)
+            self.drawSystemMarkerIcon(painter, TTBlackHole)
         elif systemMarker.type == SystemMarkerTypes.Danger:
-            self.drawSystemMarkerImage(painter, target, TTDanger)
+            self.drawSystemMarkerIcon(painter, TTDanger)
         elif systemMarker.type == SystemMarkerTypes.Supernova:
-            self.drawSystemMarkerImage(painter, target, TTSupernova)
+            self.drawSystemMarkerIcon(painter, TTSupernova)
         elif systemMarker.type == SystemMarkerTypes.LostInSpace:
-            self.drawSystemMarkerImage(painter, target, TTLostInSpace)
+            self.drawSystemMarkerIcon(painter, TTLostInSpace)
         elif systemMarker.type == SystemMarkerTypes.Minerals:
-            self.drawSystemMarkerImage(painter, target, TTMinerals)
+            self.drawMineralsSystemMarker(painter)
         elif systemMarker.type == SystemMarkerTypes.SpaceWreck:
-            self.drawSystemMarkerImage(painter, target, TTSpaceWreck)
+            self.drawSystemMarkerIcon(painter, TTSpaceWreck)
 
-    def drawSystemMarkerImage(self, painter, target, img):
+    def getSystemMarkerIconRect(self):
+        center = self.center
+        return QRect(center.x-20, center.y-20, 40, 40)
+
+    def drawSystemMarkerIcon(self, painter, img):
+        target = self.getSystemMarkerIconRect()
         painter.drawImage(target, img, img.rect())
+
+    def drawMineralsSystemMarker(self, painter):
+        center = self.center
+        systemMarker = self.hex.systemMarker
+        mineralAmount = systemMarker.mineralAmount
+
+        if mineralAmount == MineralAmounts.Min5:
+            text = '5'
+        elif mineralAmount == MineralAmounts.Min10:
+            text = '10'
+        elif mineralAmount == MineralAmounts.Min15:
+            text = '15'
+        elif mineralAmount == MineralAmounts.Min20:
+            text = '20'
+        else:
+            raise ValueError('Invalid amount: {0}!'.format(mineralAmount))
+
+        self.drawSystemMarkerIcon(painter, TTMinerals)
+
+        rect = QRect(center.x+10, center.y+10, 15, 10)
+        painter.setPen(QPen(QColor(Qt.white)))
+        painter.drawText(rect, Qt.AlignCenter, text)
+
 
     def paint(self, painter, option, widget):
         self.drawPointyHexagon(painter)
