@@ -14,3 +14,9 @@ class PlayerColors(enum.Enum):
             PlayerColors.Red,
             PlayerColors.Blue
         ]
+
+class Player(object):
+    def __init__(self, name, color, homeRegion):
+        self.name = name
+        self.color = color
+        self.homeRegion = homeRegion

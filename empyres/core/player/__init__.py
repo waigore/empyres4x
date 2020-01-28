@@ -1,1 +1,1 @@
-from .player import PlayerColors
+from .player import PlayerColors, Player
