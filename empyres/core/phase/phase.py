@@ -1,6 +1,10 @@
 from collections import OrderedDict
 from transitions import Machine
 from .common import *
+from empyres.core.event import (
+    eventGamePhaseEnter,
+    eventGamePhaseExit
+)
 
 class GamePhase(object):
     def __init__(self, name, phase, turn):
@@ -9,10 +13,10 @@ class GamePhase(object):
         self.phase = phase
 
     def phaseEnter(self, game):
-        pass
+        eventGamePhaseEnter(self.name, self.phase, self.turn)
 
     def phaseExit(self, game):
-        pass
+        eventGamePhaseExit(self.name, self.phase, self.turn)
 
     def canExit(self, game):
         return True

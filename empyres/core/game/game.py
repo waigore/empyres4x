@@ -1,5 +1,9 @@
 import logging
 from .state import GameSM
+from empyres.core.event import (
+    eventGameSetupDone,
+    eventGameSetupPlayersCreated
+)
 from empyres.core.phase import (
     getGamePhaseByName
 )
@@ -38,6 +42,7 @@ class Game(object):
         self.sm = GameSM(self)
         self.initPlayers()
 
+        eventGameSetupDone()
         #logger.info('Game set up with {} players'.format(len(self.playerOrder)))
 
     def initPlayers(self):
@@ -53,6 +58,8 @@ class Game(object):
             PlayerColors.Red: pRed
         }
         self.playerOrder = [c for c in PlayerColors.ordered()]
+
+        eventGameSetupPlayersCreated()
 
     def iterPlayers(self):
         return GamePlayerIterator(self.playerOrder, self.players)
