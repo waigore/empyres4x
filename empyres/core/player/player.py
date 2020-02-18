@@ -1,4 +1,6 @@
 import enum
+from .tech import PlayerTechnology
+from .fleet import PlayerFleets
 
 class PlayerColors(enum.Enum):
     Green = 'Green'
@@ -20,3 +22,5 @@ class Player(object):
         self.name = name
         self.color = color
         self.homeRegion = homeRegion
+        self.technology = PlayerTechnology()
+        self.fleets = PlayerFleets()

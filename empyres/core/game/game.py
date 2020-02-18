@@ -38,8 +38,9 @@ class GamePlayerIterator(object):
 
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.sm = GameSM(self)
+        self.map = kwargs.setdefault('map', None)
         self.initPlayers()
 
         eventGameSetupDone()
@@ -63,6 +64,9 @@ class Game(object):
 
     def iterPlayers(self):
         return GamePlayerIterator(self.playerOrder, self.players)
+
+    def getPlayer(self, color):
+        return self.players[color]
 
     @property
     def currentGamePhase(self):
