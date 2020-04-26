@@ -1,7 +1,8 @@
 import unittest
 from empyres.core.player import (
     PlayerTechnology,
-    PlayerTechTypes
+    PlayerTechTypes,
+    PlayerColors
 )
 from empyres.core.tech import (
     ShipSizeTechs,
@@ -10,7 +11,7 @@ from empyres.core.tech import (
 
 class TestPlayerTech(unittest.TestCase):
     def setUp(self):
-        self.playerTech = PlayerTechnology()
+        self.playerTech = PlayerTechnology(PlayerColors.Red)
 
     def test_techUpgradeWorks(self):
         shipSizeTech = self.playerTech.getTech(PlayerTechTypes.ShipSize)

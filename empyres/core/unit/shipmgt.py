@@ -1,11 +1,14 @@
 from .ship import MaxGroupSizes
+from empyres.core.util import GameObject
 
-class Ship(object):
+class Ship(GameObject):
     def __init__(self, damage = 0):
+        super().__init__('Ship')
         self.damage = damage
 
-class ShipGroup(object):
+class ShipGroup(GameObject):
     def __init__(self, shipType, techLevels, numShips = 0):
+        super().__init__('ShipGroup')
         self.shipType = shipType
         self.ships = []
         self.techLevels = techLevels #dict of {PlayerTechTypes: *Techs.I/II/III...}
@@ -48,8 +51,9 @@ class ShipGroup(object):
     def numShips(self):
         return len(self.ships)
 
-class Fleet(object):
+class Fleet(GameObject):
     def __init__(self, name = 'Fleet', shipGroups = None):
+        super().__init__('Fleet')
         self.name = name
         self.shipGroups = [] if shipGroups is None else shipGroups
 

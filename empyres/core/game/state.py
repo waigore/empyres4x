@@ -1,11 +1,13 @@
 import logging
 from transitions import Machine
 import empyres.core.phase as phase
+from empyres.core.util import GameObject
 
 logger = logging.getLogger(__name__)
 
-class GameSM(object):
+class GameSM(GameObject):
     def __init__(self, game):
+        super().__init__('GameSM')
         self.game = game
         m = Machine(self, states=phase.gamePhaseNames(), initial=phase.RoundStartP)
         m.add_ordered_transitions()

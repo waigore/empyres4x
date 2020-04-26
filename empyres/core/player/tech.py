@@ -1,5 +1,6 @@
 import enum
 from empyres.core.tech import *
+from empyres.core.util import GameObject
 
 class PlayerTechTypes(enum.Enum):
     ShipSize = 'ShipSize'
@@ -22,8 +23,10 @@ TechMapping = {
     PlayerTechTypes.Shipyard: ShipyardTechs
 }
 
-class PlayerTechnology(object):
-    def __init__(self):
+class PlayerTechnology(GameObject):
+    def __init__(self, color):
+        super().__init__('PlayerTechnology')
+        self.color = color
         self.techs = {playerTech: tech.initial() for playerTech, tech in TechMapping.items()}
 
     def getTech(self, playerTechType):

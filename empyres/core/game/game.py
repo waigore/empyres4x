@@ -7,6 +7,7 @@ from empyres.core.event import (
 from empyres.core.phase import (
     getGamePhaseByName
 )
+from empyres.core.util import GameObject
 from empyres.core.player import (
     Player,
     PlayerColors
@@ -37,8 +38,9 @@ class GamePlayerIterator(object):
         return self.players[playerColor]
 
 
-class Game(object):
+class Game(GameObject):
     def __init__(self, **kwargs):
+        super().__init__('Game')
         self.sm = GameSM(self)
         self.map = kwargs.setdefault('map', None)
         self.initPlayers()

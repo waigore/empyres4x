@@ -1,22 +1,20 @@
-class PlayerFleetIterator(object):
-    def __init__(self, fleets):
-        self.fleets = fleets
-        self.count = 0
+from empyres.core.util import (
+    GameObject,
+    GenericIterator
+)
+from empyres.core.unit.shipmgt import Fleet
 
-    def __next__(self):
-        if self.count >= len(self.fleets):
-            raise StopIteration
-
-        fleet = self.fleets[self.count]
-        self.count += 1
-        return fleet
-
-class PlayerFleets(object):
-    def __init__(self):
+class PlayerFleets(GameObject):
+    def __init__(self, color):
+        super().__init__('PlayerFleets')
+        self.color = color
         self.fleets = []
+        self.fleetLocations = {}
 
     def __iter__(self):
-        return PlayerFleetIterator(self.fleets)
+        return GenericIterator(self.fleets)
 
-    def addShipGroup(self, sg):
-        self.fleets.append(sg)
+    def createFleetAt(self, aPoint, shipGroups = None):
+        fleet = Fleet(shipGroups)
+        self.fleets.append(fleet)
+        self.fleetLocations[fleet.uuid] = aPoint

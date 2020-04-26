@@ -1,4 +1,5 @@
 import math
+import logging
 
 from .func import *
 from .region import (
@@ -11,9 +12,13 @@ from .region import (
 )
 from .marker import EmptySpaceMarker
 from empyres.core.player import PlayerColors
+from empyres.core.util import GameObject
 
-class Hex(object):
+logger = logging.getLogger(__name__)
+
+class Hex(GameObject):
     def __init__(self, map, aPoint, **kwargs):
+        super().__init__('Hex')
         self.map = map
         self.aPoint = aPoint
         self.systemMarker = kwargs.setdefault('systemMarker', EmptySpaceMarker())
@@ -31,10 +36,11 @@ class Hex(object):
         if not homeRegion.onBorder(self.aPoint): return homeRegion.name, []
         return homeRegion.name, homeRegion.borderPoints[self.aPoint]
 
-class GameMap(object):
+class GameMap(GameObject):
     HexRegionsHome = 'HexRegionsHome'
     HexRegionsDeepSpace = 'HexRegionsDeepSpace'
     def __init__(self, **kwargs):
+        super().__init__('GameMap')
         self.numCols = kwargs.setdefault('numCols', 13)
         self.numRows = kwargs.setdefault('numRows', 12)
         self.isStaggered = kwargs.setdefault('isStaggered', True)
