@@ -12,17 +12,13 @@ class CostBoundedWalk(object):
             point = queue.pop(0)
             currCost = costs[point]
             neighbors = point.allHexNeighbors()
-            #print(neighbors)
             for neighbor in neighbors:
                 if self.oobFunc(neighbor):
-                    #print(neighbor, ' out of bounds!')
                     continue
                 walkCost = self.walkCostFunc(point, neighbor)
                 if currCost + walkCost > self.maxCost:
-                    #print(neighbor, ' exceeds maxCost!')
                     continue
                 if neighbor in costs and currCost + walkCost >= costs[neighbor]:
-                    #print(neighbor, ' is at least as expensive as existing path!')
                     continue
                 queue.append(neighbor)
                 costs[neighbor] = currCost + walkCost
