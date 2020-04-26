@@ -30,4 +30,5 @@ class TestPlayerFleets(unittest.TestCase):
 
     def test_addFleet(self):
         shipGroup = ShipGroup(DestroyerShipType, self.playerTech.snapshot())
-        self.playerFleets.createFleetAt(APoint(1, 1), shipGroup)
+        fleet = self.playerFleets.createFleet(shipGroup)
+        self.assertTrue(fleet.color == PlayerColors.Red)

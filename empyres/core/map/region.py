@@ -21,6 +21,7 @@ class MapRegion(object):
         for pt in pts:
             self.borderPoints[pt] = self.calcPointBorders(pt)
 
+    @functools.lru_cache(maxsize=128)
     def onBorder(self, aPoint):
         neighbors = aPoint.allHexNeighbors()
         for neighbor in neighbors:

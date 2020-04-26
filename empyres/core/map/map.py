@@ -22,16 +22,23 @@ class Hex(GameObject):
         self.map = map
         self.aPoint = aPoint
         self.systemMarker = kwargs.setdefault('systemMarker', EmptySpaceMarker())
+        self.fleets = kwargs.setdefault('fleets', [])
+        self.homeRegionCalculated = False
+        self.homeRegion = None
 
-    def containingHomeRegion(self):
-        homeRegions = self.map.getAllHomeRegions()
-        for homeRegion in homeRegions:
+    def calcHomeRegionIfNeeded(self):
+        if self.homeRegionCalculated:
+            return
+        self.homeRegionCalculated = True
+        self.homeRegion = None
+        for homeRegion in self.map.getAllHomeRegions():
             if homeRegion.contains(self.aPoint):
-                return homeRegion
-        return None
+                self.homeRegion = homeRegion
+                break
 
     def homeRegionBorders(self):
-        homeRegion = self.containingHomeRegion()
+        self.calcHomeRegionIfNeeded()
+        homeRegion = self.homeRegion
         if homeRegion is None: return None, []
         if not homeRegion.onBorder(self.aPoint): return homeRegion.name, []
         return homeRegion.name, homeRegion.borderPoints[self.aPoint]

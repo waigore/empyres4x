@@ -52,8 +52,9 @@ class ShipGroup(GameObject):
         return len(self.ships)
 
 class Fleet(GameObject):
-    def __init__(self, name = 'Fleet', shipGroups = None):
+    def __init__(self, color, name = 'Fleet', shipGroups = None):
         super().__init__('Fleet')
+        self.color = color
         self.name = name
         self.shipGroups = [] if shipGroups is None else shipGroups
 

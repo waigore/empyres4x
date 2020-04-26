@@ -9,12 +9,11 @@ class PlayerFleets(GameObject):
         super().__init__('PlayerFleets')
         self.color = color
         self.fleets = []
-        self.fleetLocations = {}
 
     def __iter__(self):
         return GenericIterator(self.fleets)
 
-    def createFleetAt(self, aPoint, shipGroups = None):
-        fleet = Fleet(shipGroups)
+    def createFleet(self, shipGroups = None):
+        fleet = Fleet(self.color, shipGroups)
         self.fleets.append(fleet)
-        self.fleetLocations[fleet.uuid] = aPoint
+        return fleet
