@@ -66,6 +66,9 @@ class GameMap(object):
             return None
         return self.hexes[r][q + (r//2)]
 
+    def isOob(self, aPoint):
+        return self.getHexAt(aPoint) is None
+
     def initHomeRegions(self):
         self.mapRegions[GameMap.HexRegionsHome] = {
             PlayerColors.Yellow: HomeRegionYellow,
