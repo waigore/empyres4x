@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         systemMarkerGen = SystemMarkerGen(self.gameMap, seed=30)
         systemMarkerGen.populateMap()
 
-        self.gameMapWidget = GameMapWidget(self.gameMap)
+        self.gameMapWidget = GameMapWidget(self.gameMap, debug=True)
         layout.addWidget(self.gameMapWidget)
 
         self.revealShortcut = QShortcut(QKeySequence("R"), self)

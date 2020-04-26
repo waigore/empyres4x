@@ -38,6 +38,7 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         self.mapWidget = mapWidget
         self.hex = hex
         self.center = center #CPoint
+        self.debug = kwargs.setdefault('debug', False)
 
         self.initParams()
         self.setPolygon(self.pointyHexagon())
@@ -46,7 +47,7 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         #self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
 
-    def pointyHexCorner(self, i, center, size):
+    def pointyHexCorner(self, i, center = None, size = None):
         if not size:
             size = self.size
         if not center:
@@ -89,6 +90,12 @@ class HexGraphicsItem(QGraphicsPolygonItem):
             pt2 = hexagonPoints[i+1]
             painter.setPen(pen)
             painter.drawLine(pt1, pt2)
+
+    def drawHexCoord(self, painter):
+        topCorner = self.pointyHexCorner(5)
+        textRect = QRect(topCorner.x-18, topCorner.y+4, 36, 16)
+        painter.setPen(QPen(QColor(Qt.white)))
+        painter.drawText(textRect, Qt.AlignCenter, str(self.hex.aPoint))
 
     def drawSystemMarker(self, painter):
         center = self.center
@@ -157,6 +164,8 @@ class HexGraphicsItem(QGraphicsPolygonItem):
         self.drawPointyHexagon(painter)
         if self.hex.systemMarker:
             self.drawSystemMarker(painter)
+        if self.debug:
+            self.drawHexCoord(painter)
 
     @property
     def size(self):

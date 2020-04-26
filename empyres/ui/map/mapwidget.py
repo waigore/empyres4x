@@ -38,6 +38,7 @@ class GameMapWidget(QGraphicsView):
         super().__init__()
         self.gameMap = gameMap
         self.hexSize = kwargs.setdefault('hexSize', 60)
+        self.debug = kwargs.setdefault('debug', False)
 
         self.initScene()
         self.initParams()
@@ -71,7 +72,7 @@ class GameMapWidget(QGraphicsView):
                     centerX -= self.hexWidth*0.5
                 centerY = self.rowHeight*(i+1)-self.hexHeight*0.25
                 center = CPoint(centerX, centerY)
-                hexItem = HexGraphicsItem(self, hex, center)
+                hexItem = HexGraphicsItem(self, hex, center, debug=self.debug)
                 self.scene.addItem(hexItem)
 
     def revealAllHexes(self):
