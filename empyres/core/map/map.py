@@ -22,7 +22,7 @@ class Hex(GameObject):
         self.map = map
         self.aPoint = aPoint
         self.systemMarker = kwargs.setdefault('systemMarker', EmptySpaceMarker())
-        self.fleets = kwargs.setdefault('fleets', [])
+        self.fleet = kwargs.setdefault('fleet', None)
         self.homeRegionCalculated = False
         self.homeRegion = None
 

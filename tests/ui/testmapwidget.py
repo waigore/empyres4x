@@ -11,8 +11,11 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QKeySequence
 from empyres.core.map import (
     SystemMarkerGen,
-    GameMap
+    GameMap,
+    APoint
 )
+from empyres.core.unit import Fleet
+from empyres.core.player import PlayerColors
 from empyres.ui.map import GameMapWidget
 
 class MainWindow(QMainWindow):
@@ -26,6 +29,9 @@ class MainWindow(QMainWindow):
         self.gameMap = GameMap()
         systemMarkerGen = SystemMarkerGen(self.gameMap, seed=30)
         systemMarkerGen.populateMap()
+
+        self.gameMap.getHexAt(APoint(1, 3)).fleet = Fleet(PlayerColors.Red)
+        self.gameMap.getHexAt(APoint(2, 4)).fleet = Fleet(PlayerColors.Blue)
 
         self.gameMapWidget = GameMapWidget(self.gameMap, debug=True)
         layout.addWidget(self.gameMapWidget)

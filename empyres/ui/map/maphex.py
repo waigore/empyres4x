@@ -29,9 +29,9 @@ from empyres.core.map import (
 )
 from empyres.ui.icon import *
 from .common import HexBorderColors
+from .hexinfo import HexFleetIcon
 
 class HexGraphicsItem(QGraphicsPolygonItem):
-    Adjust = 0.5
 
     def __init__(self, mapWidget, hex, center, **kwargs):
         super(HexGraphicsItem, self).__init__()
@@ -42,10 +42,18 @@ class HexGraphicsItem(QGraphicsPolygonItem):
 
         self.initParams()
         self.setPolygon(self.pointyHexagon())
+        self.initFleetIcon()
 
     def initParams(self):
         #self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
+
+    def initFleetIcon(self):
+        self.fleetIcon = HexFleetIcon(self.hex)
+        self.fleetIcon.setParentItem(self)
+
+        corner = self.pointyHexCorner(4)
+        self.fleetIcon.setPos(corner.x+12, corner.y+12)
 
     def pointyHexCorner(self, i, center = None, size = None):
         if not size:

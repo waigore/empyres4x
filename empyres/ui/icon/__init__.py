@@ -15,3 +15,8 @@ TTMinerals = loadIcon('tt_minerals')
 TTNebula  = loadIcon('tt_nebula')
 TTSpaceWreck = loadIcon('tt_spacewreck')
 TTSupernova = loadIcon('tt_supernova')
+
+FleetBlue = loadIcon('fleet_blue')
+FleetGreen = loadIcon('fleet_green')
+FleetRed = loadIcon('fleet_red')
+FleetYellow = loadIcon('fleet_yellow')
