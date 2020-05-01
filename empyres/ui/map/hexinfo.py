@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (
     QGraphicsItem
 )
 from PyQt5.QtCore import (
+    Qt,
     QRect,
     QRectF
 )
@@ -26,7 +27,7 @@ class HexFleetIcon(QGraphicsItem):
 
     @property
     def playerColor(self):
-        return None if self.hex.fleet is None else self.hex.fleet.color
+        return None if len(self.hex.fleets) == 0 else self.hex.fleets[0].color
 
     def drawIcon(self, painter):
         if self.playerColor is None:
@@ -48,12 +49,22 @@ class HexFleetIcon(QGraphicsItem):
         painter.setPen(borderColorPen)
         painter.drawRect(bRect)
 
+    def drawFleetNumber(self, painter):
+        num = '*'
+        br = self.boundingRect()
+        rect = QRect(int(br.x()+br.width()-5), int(br.y()), 5, 10)
+        pen = QPen(QColor(Qt.white), 1)
+        painter.setPen(pen)
+        painter.drawText(rect, Qt.AlignCenter, num)
+
     def borderRect(self):
         br = self.boundingRect()
         return QRectF(br.x()+1, br.y()+1, br.width()-1, br.height()-1)
 
     def paint(self, painter, option, widget):
         self.drawIcon(painter)
+        if len(self.hex.fleets) > 1:
+            self.drawFleetNumber(painter)
         if self.selected:
             self.drawSelectedBorder(painter)
 
@@ -65,5 +76,5 @@ class HexFleetIcon(QGraphicsItem):
         if self.playerColor:
             self.selected = not self.selected
             if self.selected:
-                self.parentItem().mapWidget.hexFleetSelected.emit(self, self.hex, self.hex.fleet)
+                self.parentItem().mapWidget.hexFleetSelected.emit(self, self.hex, self.playerColor)
             self.update()

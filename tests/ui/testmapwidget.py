@@ -30,8 +30,10 @@ class MainWindow(QMainWindow):
         systemMarkerGen = SystemMarkerGen(self.gameMap, seed=30)
         systemMarkerGen.populateMap()
 
-        self.gameMap.getHexAt(APoint(1, 3)).fleet = Fleet(PlayerColors.Red)
-        self.gameMap.getHexAt(APoint(2, 4)).fleet = Fleet(PlayerColors.Blue)
+        self.gameMap.getHexAt(APoint(1, 3)).fleets.append(Fleet(PlayerColors.Red))
+        self.gameMap.getHexAt(APoint(1, 3)).fleets.append(Fleet(PlayerColors.Red))
+        self.gameMap.getHexAt(APoint(1, 3)).fleets.append(Fleet(PlayerColors.Red))
+        self.gameMap.getHexAt(APoint(2, 4)).fleets.append(Fleet(PlayerColors.Blue))
 
         self.gameMapWidget = GameMapWidget(self.gameMap, debug=True)
         self.gameMapWidget.hexFleetSelected.connect(self.handleMapWidgetHexFleetSelected)
@@ -58,11 +60,11 @@ class MainWindow(QMainWindow):
         self.gameMapWidget.hideAllHexes()
 
     @pyqtSlot(object, object, object)
-    def handleMapWidgetHexFleetSelected(self, icon, hex, fleet):
+    def handleMapWidgetHexFleetSelected(self, icon, hex, color):
         if self.lastSelectedHexFleetIcon:
             self.lastSelectedHexFleetIcon.deselect()
         self.lastSelectedHexFleetIcon = icon
-        print('fleet selected: %s %s' % (str(hex.aPoint), fleet.color))
+        print('icon selected: %s %s' % (str(hex.aPoint), color))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
