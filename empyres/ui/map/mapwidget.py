@@ -34,6 +34,8 @@ logger = logging.getLogger(__name__)
 
 
 class GameMapWidget(QGraphicsView):
+    hexFleetSelected = pyqtSignal(object, object, object) #hexFleetIcon, hex, fleet
+
     def __init__(self, gameMap, **kwargs):
         super().__init__()
         self.gameMap = gameMap

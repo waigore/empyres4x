@@ -34,6 +34,8 @@ class MainWindow(QMainWindow):
         self.gameMap.getHexAt(APoint(2, 4)).fleet = Fleet(PlayerColors.Blue)
 
         self.gameMapWidget = GameMapWidget(self.gameMap, debug=True)
+        self.gameMapWidget.hexFleetSelected.connect(self.handleMapWidgetHexFleetSelected)
+        self.lastSelectedHexFleetIcon = None
         layout.addWidget(self.gameMapWidget)
 
         self.revealShortcut = QShortcut(QKeySequence("R"), self)
@@ -54,6 +56,13 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def hide(self):
         self.gameMapWidget.hideAllHexes()
+
+    @pyqtSlot(object, object, object)
+    def handleMapWidgetHexFleetSelected(self, icon, hex, fleet):
+        if self.lastSelectedHexFleetIcon:
+            self.lastSelectedHexFleetIcon.deselect()
+        self.lastSelectedHexFleetIcon = icon
+        print('fleet selected: %s %s' % (str(hex.aPoint), fleet.color))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
