@@ -111,3 +111,17 @@ ScoutShipType = ShipType(ShipTypes.Scout, CombatClasses.E,
         buildCost = 6,
         hullSize = 1,
         maintenanceCost = 1)
+
+AllShipTypes = {
+    ShipTypes.Colony: ColonyShipType,
+    ShipTypes.Battleship: BattleshipShipType,
+    ShipTypes.Battlecruiser: BattlecruiserShipType,
+    ShipTypes.Cruiser: CruiserShipType,
+    ShipTypes.Destroyer: DestroyerShipType,
+    ShipTypes.Decoy: DecoyShipType,
+    ShipTypes.Dreadnaught: DreadnaughtShipType,
+    ShipTypes.Scout: ScoutShipType,
+}
+
+def getShipTypeInfo(shipType):
+    return AllShipTypes[shipType]

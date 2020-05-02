@@ -22,11 +22,11 @@ class TestPlayerFleets(unittest.TestCase):
         shipGroup = ShipGroup(ScoutShipType, self.playerTech.snapshot())
         for i in range(5):
             shipGroup.addShip()
-        self.assertTrue(shipGroup.numShips == 5)
+        self.assertTrue(shipGroup.numShips == 6)
 
         for i in range(5):
             shipGroup.removeShip()
-        self.assertTrue(shipGroup.numShips == 0)
+        self.assertTrue(shipGroup.numShips == 1)
 
     def test_addFleet(self):
         shipGroup = ShipGroup(DestroyerShipType, self.playerTech.snapshot())

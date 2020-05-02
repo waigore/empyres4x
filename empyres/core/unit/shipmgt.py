@@ -7,7 +7,7 @@ class Ship(GameObject):
         self.damage = damage
 
 class ShipGroup(GameObject):
-    def __init__(self, shipType, techLevels, numShips = 0):
+    def __init__(self, shipType, techLevels, numShips = 1):
         super().__init__('ShipGroup')
         self.shipType = shipType
         self.ships = []
