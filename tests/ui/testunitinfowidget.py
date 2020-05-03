@@ -4,8 +4,11 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QMainWindow,
     QShortcut,
-    QWidget
+    QWidget,
+    QDockWidget,
+    QLabel
 )
+from PyQt5.QtCore import Qt
 from empyres.core.player import (
     PlayerFleets,
     PlayerTechnology,
@@ -37,12 +40,12 @@ class MainWindow(QMainWindow):
 
         fleetInfoWidget = FleetInfoWidget(fleet)
 
-        layout = QHBoxLayout()
-        layout.addWidget(fleetInfoWidget)
+        self.setCentralWidget(QLabel('Floating Fleet Info'))
 
-        w = QWidget()
-        w.setLayout(layout)
-        self.setCentralWidget(w)
+        dockWidget = QDockWidget('Fleet Info', self)
+        dockWidget.setWidget(fleetInfoWidget)
+        dockWidget.setFloating(False)
+        self.addDockWidget(Qt.LeftDockWidgetArea, dockWidget)
 
         self.show()
 
