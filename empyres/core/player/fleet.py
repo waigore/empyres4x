@@ -14,6 +14,7 @@ class PlayerFleets(GameObject):
         return GenericIterator(self.fleets)
 
     def createFleet(self, shipGroups = None):
-        fleet = Fleet(self.color, shipGroups)
+        name = 'Fleet #%d' % (len(self.fleets)+1)
+        fleet = Fleet(self.color, name, shipGroups = shipGroups)
         self.fleets.append(fleet)
         return fleet

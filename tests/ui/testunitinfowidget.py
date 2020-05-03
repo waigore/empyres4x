@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QWidget
 )
 from empyres.core.player import (
+    PlayerFleets,
     PlayerTechnology,
     PlayerColors
 )
@@ -16,7 +17,8 @@ from empyres.core.unit import (
     DestroyerShipType
 )
 from empyres.ui.unit import (
-    ShipGroupInfoWidget
+    ShipGroupInfoWidget,
+    FleetInfoWidget
 )
 
 class MainWindow(QMainWindow):
@@ -28,11 +30,15 @@ class MainWindow(QMainWindow):
         playerTech = PlayerTechnology(PlayerColors.Red)
         shipGroup = ShipGroup(ScoutShipType, playerTech.snapshot())
         shipGroup.addShip()
+        shipGroup2 = ShipGroup(DestroyerShipType, playerTech.snapshot())
 
-        shipGroupInfoWidget = ShipGroupInfoWidget(shipGroup)
+        playerFleets = PlayerFleets(PlayerColors.Red)
+        fleet = playerFleets.createFleet([shipGroup, shipGroup2])
+
+        fleetInfoWidget = FleetInfoWidget(fleet)
 
         layout = QHBoxLayout()
-        layout.addWidget(shipGroupInfoWidget)
+        layout.addWidget(fleetInfoWidget)
 
         w = QWidget()
         w.setLayout(layout)
